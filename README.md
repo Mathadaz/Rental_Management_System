@@ -24,7 +24,7 @@ Uvicorn
 ## Frontend
 React (Vite)
 Axios
-Tailwind CSS (optional)
+Tailwind CSS
 
 # Project Structure
 
@@ -59,3 +59,34 @@ rental_backend/
 1. Clone repository
 2. git clone https://github.com/MathadaZ/Rental_Management_System.git
 cd Rental_Management_System/rental_backend
+
+2. Create virtual environment
+python -m venv venv
+3. Activate virtual environment
+
+Windows
+
+venv\Scripts\activate
+
+Mac/Linux
+
+source venv/bin/activate
+4. Install dependencies
+pip install -r requirements.txt
+
+If needed manually:
+
+pip install fastapi uvicorn python-jose passlib bcrypt
+5. Run backend server
+uvicorn main:app --reload
+
+If running as a module:
+
+uvicorn rental_backend.main:app --reload
+Backend API
+Base URL:
+http://127.0.0.1:8000
+Swagger Documentation:
+http://127.0.0.1:8000/docs
+Redoc Documentation:
+http://127.0.0.1:8000/redoc
