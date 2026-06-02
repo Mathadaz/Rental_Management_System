@@ -61,7 +61,7 @@ rental_backend/
 cd Rental_Management_System/rental_backend
 
 2. Create virtual environment
-python -m venv venv
+. python -m venv venv
 3. Activate virtual environment
 
 Windows
