@@ -64,11 +64,11 @@ cd Rental_Management_System/rental_backend
 . python -m venv venv
 3. Activate virtual environment
 
-Windows
+## Windows
 
 venv\Scripts\activate
 
-Mac/Linux
+## Mac/Linux
 
 source venv/bin/activate
 4. Install dependencies
@@ -90,3 +90,54 @@ Swagger Documentation:
 http://127.0.0.1:8000/docs
 Redoc Documentation:
 http://127.0.0.1:8000/redoc
+
+# Frontend Setup (React + Vite)
+
+## 1. Navigate to frontend
+cd frontend
+## 2. Install dependencies
+npm install
+## 3. Run development server
+npm run dev
+
+### Frontend URL
+http://localhost:5173
+
+# Authentication
+
+The system uses JWT (JSON Web Token) authentication for:
+
+User login and registration
+Secure API access
+Protected routes
+Session handling
+
+# Database
+SQLite3 database: rental.db
+Auto-generated on first run
+Can be upgraded to PostgreSQL for production environments
+
+# Running Full Stack Application
+## Backend
+### cd rental_backend
+uvicorn main:app --reload
+
+## Frontend
+cd frontend
+npm install
+npm run dev
+
+## Future Improvements
+Email notification system for rent reminders
+Payment gateway integration
+Role-based access control (Admin, Landlord, Tenant)
+Cloud deployment (Render, AWS, Azure)
+Mobile application support
+
+# Author
+
+Zwivhuya Mathada
+
+# License
+
+This project is licensed under the MIT License.
