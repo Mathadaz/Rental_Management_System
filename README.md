@@ -28,6 +28,32 @@ React (Vite)
 Axios
 Tailwind CSS / CSS (if applicable)
 
+rental_backend/
+│
+├── db/
+│   └── database.py
+│
+├── models/
+│   └── models.py
+│
+├── routers/
+│   ├── auth_router.py
+│   ├── dashboard.py
+│   ├── expenses.py
+│   ├── leases.py
+│   ├── maintenance.py
+│   ├── properties.py
+│   ├── tenants.py
+│   └── units.py
+│
+├── schemas/
+│   └── schemas.py
+│
+├── auth.py
+├── main.py
+├── rental.db
+└── requirements.txt
+
 ⚙️ Backend Setup (FastAPI - rental_backend)
 1. Navigate to backend folder
 cd rental_backend
