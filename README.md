@@ -1,1 +1,2 @@
 # Rental_Management_System
+A full-stack Rental Property Management System built with FastAPI and SQLite3. The system helps landlords and property managers efficiently manage properties, tenants, leases, rental units, maintenance requests, expenses, and dashboard analytics. Inspired by common property management workflows such as tenant management, lease tracking, maintenance handling, and financial monitoring.
