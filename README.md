@@ -11,3 +11,19 @@ The system helps landlords and property managers efficiently manage:
 📊 Dashboard analytics
 
 It is inspired by real-world property management workflows used in rental agencies and landlords.
+
+🚀 Tech Stack
+
+Backend
+
+FastAPI
+Python 3.10+
+SQLite3
+JWT Authentication
+Uvicorn
+
+Frontend
+
+React (Vite)
+Axios
+Tailwind CSS / CSS (if applicable)
