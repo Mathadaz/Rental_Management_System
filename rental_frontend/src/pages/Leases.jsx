@@ -9,7 +9,7 @@ function Modal({ title, onClose, children }) {
       <div className="card w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h3 className="font-display text-xl font-bold" style={{ color: "#1a3c2e" }}>{title}</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl">✕</button>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl">X</button>
         </div>
         {children}
       </div>
@@ -23,6 +23,7 @@ function LeaseForm({ onSave, onClose }) {
   const [tenants, setTenants] = useState([]);
   const [form, setForm] = useState({ unit_id: "", tenant_id: "", start_date: "", end_date: "", monthly_rent: "", deposit_paid: "", notes: "" });
   const [selectedProp, setSelectedProp] = useState("");
+  const [loadingUnits, setLoadingUnits] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -33,43 +34,91 @@ function LeaseForm({ onSave, onClose }) {
   }, []);
 
   useEffect(() => {
-    if (selectedProp) getUnits(selectedProp).then(r => setUnits(r.data));
+    if (selectedProp) {
+      setLoadingUnits(true);
+      getUnits(selectedProp)
+        .then(r => setUnits(r.data))
+        .finally(() => setLoadingUnits(false));
+    } else {
+      setUnits([]);
+    }
   }, [selectedProp]);
 
   const handle = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await createLease({ ...form, unit_id: +form.unit_id, tenant_id: +form.tenant_id, monthly_rent: +form.monthly_rent, deposit_paid: +form.deposit_paid || 0 });
+      const { data } = await createLease({
+        ...form,
+        unit_id: +form.unit_id,
+        tenant_id: +form.tenant_id,
+        monthly_rent: +form.monthly_rent,
+        deposit_paid: +form.deposit_paid || 0
+      });
       toast.success("Lease created!");
       onSave(data);
-    } catch (err) { toast.error(err.response?.data?.detail || "Failed to create lease"); }
-    finally { setLoading(false); }
+    } catch (err) {
+      toast.error(err.response?.data?.detail || "Failed to create lease");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const selectUnit = (unitId) => {
+    const unit = units.find(u => u.id === +unitId);
+    setForm({ ...form, unit_id: unitId, monthly_rent: unit ? unit.monthly_rent : form.monthly_rent });
   };
 
   return (
     <form onSubmit={handle} className="space-y-4">
+      {/* Property */}
       <div>
         <label>Property</label>
-        <select value={selectedProp} onChange={e => { setSelectedProp(e.target.value); setForm({ ...form, unit_id: "" }); }}>
+        <select value={selectedProp} onChange={e => { setSelectedProp(e.target.value); setForm({ ...form, unit_id: "", monthly_rent: "" }); }}>
           <option value="">Select property...</option>
           {properties.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
         </select>
       </div>
+
+      {/* Unit */}
       <div>
-        <label>Unit</label>
-        <select value={form.unit_id} onChange={e => setForm({ ...form, unit_id: e.target.value })} required>
-          <option value="">Select unit...</option>
-          {units.map(u => <option key={u.id} value={u.id}>Unit {u.unit_number} — R{u.monthly_rent}/mo</option>)}
+        <label>
+          Unit
+          {!selectedProp && <span style={{ color: "#9ca3af", fontWeight: 400, fontSize: 12 }}> — select a property first</span>}
+          {selectedProp && loadingUnits && <span style={{ color: "#9ca3af", fontWeight: 400, fontSize: 12 }}> — loading...</span>}
+          {selectedProp && !loadingUnits && units.length === 0 && (
+            <span style={{ color: "#c53030", fontWeight: 400, fontSize: 12 }}> — no units found, add units to this property first</span>
+          )}
+        </label>
+        <select
+          value={form.unit_id}
+          onChange={e => selectUnit(e.target.value)}
+          required
+          disabled={!selectedProp || loadingUnits || units.length === 0}
+        >
+          <option value="">
+            {!selectedProp ? "Select a property first..." :
+             loadingUnits ? "Loading units..." :
+             units.length === 0 ? "No units available" :
+             "Select unit..."}
+          </option>
+          {units.map(u => (
+            <option key={u.id} value={u.id}>
+              Unit {u.unit_number} — R{u.monthly_rent.toLocaleString()}/mo {u.is_occupied ? "(Occupied)" : "(Vacant)"}
+            </option>
+          ))}
         </select>
       </div>
+
+      {/* Tenant */}
       <div>
         <label>Tenant</label>
         <select value={form.tenant_id} onChange={e => setForm({ ...form, tenant_id: e.target.value })} required>
           <option value="">Select tenant...</option>
-          {tenants.map(t => <option key={t.id} value={t.id}>{t.full_name}</option>)}
+          {tenants.map(t => <option key={t.id} value={t.id}>{t.full_name} {t.email ? `(${t.email})` : ""}</option>)}
         </select>
       </div>
+
       <div className="grid grid-cols-2 gap-4">
         <div><label>Start Date</label><input type="date" value={form.start_date} onChange={e => setForm({ ...form, start_date: e.target.value })} required /></div>
         <div><label>End Date</label><input type="date" value={form.end_date} onChange={e => setForm({ ...form, end_date: e.target.value })} required /></div>
@@ -129,6 +178,7 @@ export default function Leases() {
         <div className="card p-16 text-center">
           <FileText size={40} className="mx-auto mb-4" style={{ color: "#d1d5db" }} />
           <p className="font-semibold mb-1" style={{ color: "#6b7280" }}>No leases yet</p>
+          <p className="text-sm mb-3" style={{ color: "#9ca3af" }}>Make sure you have a property with units and a tenant added first</p>
           <button className="btn-primary mt-3" onClick={() => setShowForm(true)}>Create Lease</button>
         </div>
       ) : (
@@ -143,7 +193,7 @@ export default function Leases() {
                   <div className="font-semibold text-sm mb-1" style={{ color: "#1a3c2e" }}>Lease #{l.id} — Unit {l.unit_id}</div>
                   <div className="flex items-center gap-2 text-xs" style={{ color: "#6b7280" }}>
                     <Calendar size={11} />
-                    {fmt(l.start_date)} → {fmt(l.end_date)}
+                    {fmt(l.start_date)} to {fmt(l.end_date)}
                   </div>
                   <div className="text-xs mt-1 font-mono" style={{ color: "#2d6a4f" }}>R {l.monthly_rent.toLocaleString()}/mo</div>
                 </div>
