@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: #f7f5f0;
+  color: #1a3c2e;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #ede9e1; }
+::-webkit-scrollbar-thumb { background: #2d6a4f; border-radius: 3px; }
+
+.card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #ede9e1;
+  box-shadow: 0 2px 12px rgba(26,60,46,0.06);
+  transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: 0 4px 24px rgba(26,60,46,0.12); }
+
+.btn-primary {
+  background: #1a3c2e;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+.btn-primary:hover { background: #2d6a4f; transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-ghost {
+  background: transparent;
+  color: #1a3c2e;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  border: 1px solid #ede9e1;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-ghost:hover { background: #e8f5ef; }
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid #ede9e1;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #1a3c2e;
+  background: white;
+  transition: border-color 0.2s;
+  outline: none;
+}
+input:focus, select:focus, textarea:focus { border-color: #2d6a4f; }
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a3c2e;
+  margin-bottom: 6px;
+}
+
+.badge-green { background: #e8f5ef; color: #1a3c2e; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+.badge-amber { background: #fef9e7; color: #b7791f; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+.badge-red { background: #fef2f2; color: #c53030; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+.badge-gray { background: #f3f4f6; color: #6b7280; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
